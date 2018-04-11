@@ -3513,6 +3513,7 @@ PyArray_GetDTypeTransferFunction(int aligned,
 {
     npy_intp src_itemsize, dst_itemsize;
     int src_type_num, dst_type_num;
+    int is_simple;
 
 #if NPY_DT_DBG_TRACING
     printf("Calculating dtype transfer from ");
@@ -3574,12 +3575,15 @@ PyArray_GetDTypeTransferFunction(int aligned,
         }
     }
 
+    is_simple = src_type_num < NPY_NTYPES && dst_type_num < NPY_NTYPES;
+
     /*
-     * If there are no references and the data types are equivalent,
+     * If there are no references and the data types are equivalent and builtin,
      * return a simple copy
      */
     if (!PyDataType_REFCHK(src_dtype) && !PyDataType_REFCHK(dst_dtype) &&
-                            PyArray_EquivTypes(src_dtype, dst_dtype)) {
+                            PyArray_EquivTypes(src_dtype, dst_dtype) &&
+                            is_simple) {
         /*
          * We can't pass through the aligned flag because it's not
          * appropriate. Consider a size-8 string, it will say it's
