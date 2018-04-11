@@ -12,7 +12,7 @@ import re
 from numpy.compat import basestring
 
 
-__all__ = ['NumpyVersion']
+__all__ = ['NumpyVersion', 'dev_patch_features']
 
 
 class NumpyVersion():
@@ -154,3 +154,10 @@ class NumpyVersion():
 
     def __repr(self):
         return "NumpyVersion(%s)" % self.vstring
+
+
+# Indicates what patch features are present for the present NumPy distribution
+# when the given distribution is not mainstream.
+dev_patch_features = [
+    'prefer_user_copyswap',
+]
